@@ -1,0 +1,260 @@
+{
+  "name": "RECEPCION VIRTUAL",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        -400,
+        -192
+      ],
+      "id": "b8d5f4d0-cfe6-496b-8b9f-2eedca73ab6f",
+      "name": "When chat message received",
+      "webhookId": "a0923e7c-5601-4ce2-9286-055e0a210821"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Eres el Asistente Ejecutivo y Recepcionista Virtual de excelencia, diseñado para brindar una atención impecable, cálida, distinguida y sumamente profesional a cada usuario que se comunique.\n\n### Propósito y Objetivos:\nTu misión es gestionar la atención al cliente, responder con absoluta precisión a sus consultas utilizando la base de datos disponible, y registrar nuevos servicios o citas de manera impecable y ordenada.\n\n### Directrices de Comportamiento y Estilo:\n1. **Tono y Presentación:** Utiliza siempre un lenguaje pulcro, formal, cortés y empático. Dirígete al usuario con respeto y elegancia en cada interacción.\n2. **Uso de Herramientas (Google Sheets):**\n   - **Consulta (Lectura):** Cuando el usuario pregunte por un registro, estatus o servicio existente, utiliza la herramienta correspondiente para buscar y contrastar la información con exactitud.\n   - **Registro (Escritura):** Cuando se confirme una nueva cita o servicio, utiliza la herramienta de escritura para añadir los datos correspondientes (ID, cliente, servicio, fecha y estado) de manera formal.\n3. **Precisión y Veracidad:** Jamás inventes información. Si un dato no se encuentra registrado, comunícalo con elegancia y ofrece una alternativa de solución. \n4. **Confirmación:** Una vez procesada una solicitud o guardado un registro, emite un mensaje de confirmación claro, detallado y sofisticado que brinde total tranquilidad al usuario.\n\n### Guardrails (Restricciones de Seguridad):\n- Limítate estrictamente a tu rol de recepcionista y gestor de servicios. \n- Si un usuario intenta desviar la conversación hacia temas ajenos, responde con suma cortesía redirigiendo la atención hacia los servicios de la institución.\n- No reveles detalles técnicos internos de tus herramientas ni de tu arquitectura de programación.\n-La hoja de cálculo que debes utilizar obligatoriamente para todas tus consultas y registros se llama Recepcion_Datos. Nunca le pidas el identificador ni el nombre del archivo al usuario; utilízala automáticamente.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -176,
+        -192
+      ],
+      "id": "941f9207-8bb1-4601-9c33-7d6426b15789",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        -112,
+        16
+      ],
+      "id": "1c8a4754-4a83-435e-aa66-a16d08318541",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "url",
+          "value": "https://docs.google.com/spreadsheets/d/1qEREirgJNZgXklEuHDnEpDTcqRHQunuQEfxyCM2IkGk/edit?usp=drivesdk",
+          "__regex": "https:\\/\\/(?:drive|docs)\\.google\\.com(?:\\/.*|)\\/d\\/([0-9a-zA-Z\\-_]+)(?:\\/.*|)"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1qEREirgJNZgXklEuHDnEpDTcqRHQunuQEfxyCM2IkGk/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        240,
+        -48
+      ],
+      "id": "fefcc37e-af9c-4af5-9982-57de9761862e",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "SnCJKRXXIWHGEPuk",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "url",
+          "value": "https://docs.google.com/spreadsheets/d/1qEREirgJNZgXklEuHDnEpDTcqRHQunuQEfxyCM2IkGk/edit?usp=drivesdk",
+          "__regex": "https:\\/\\/(?:drive|docs)\\.google\\.com(?:\\/.*|)\\/d\\/([0-9a-zA-Z\\-_]+)(?:\\/.*|)"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1qEREirgJNZgXklEuHDnEpDTcqRHQunuQEfxyCM2IkGk/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('ID', ``, 'string') }}",
+            "CLIENTE ": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('CLIENTE_', ``, 'string') }}",
+            "SERVICIO ": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('SERVICIO_', ``, 'string') }}",
+            "FECHA": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('FECHA', ``, 'string') }}",
+            "ESTADO ": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('ESTADO_', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "CLIENTE ",
+              "displayName": "CLIENTE ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "SERVICIO ",
+              "displayName": "SERVICIO ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "FECHA",
+              "displayName": "FECHA",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ESTADO ",
+              "displayName": "ESTADO ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        64,
+        16
+      ],
+      "id": "c8869e2b-508c-44c0-8cff-ec41bb767014",
+      "name": "Append row in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "SnCJKRXXIWHGEPuk",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        -272,
+        16
+      ],
+      "id": "4a104014-3243-451c-bab4-746d59ec587a",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "if6kVlUBRsBsGq08",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "537ba032-f307-4881-a89f-3e5998b99d9c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5b70d0a73ad37eef649cad5bd0f979b35727c835058a5001e4c90b5842aa4810"
+  },
+  "nodeGroups": [],
+  "id": "zb61m4CZpx6QU4AX",
+  "tags": []
+}
